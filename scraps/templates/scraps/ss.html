@@ -1,0 +1,926 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>CRUD</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="182d4c6b-17fa-4531-a332-49d3631d31a9" class="page sans"><header><h1 class="page-title">CRUD</h1></header><div class="page-body"><p id="fac35aae-0e5e-4807-b2e4-46b736b878ec" class="">
+</p><pre id="f3f8ea82-734a-48c5-800c-2c6679d1de2e" class="code"><code>class Article(models.Model):
+    title = models.CharField(max_length=30)
+    content = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)</code></pre><p id="ce746d82-1a26-49b0-a9ab-82b729e5dc66" class="">created랑 update에서 auto_now 두개 구분하기</p><p id="78f727aa-695f-4e05-943e-4256cbc9457d" class="">
+</p><hr id="5a72f043-fd00-492e-979d-3f82e81c099a"/><p id="20a396d0-6a01-43da-b90f-2b5d532099f3" class="">
+</p><h2 id="802d7008-87a6-407a-92c4-4cc56909378d" class="">어드민 생성</h2><ul id="81c41165-7e8b-4d30-a96c-bf25544c04d9" class="bulleted-list"><li style="list-style-type:disc">python <a href="http://manage.py/">manage.py</a> createsuperuser</li></ul><p id="7d543659-5bee-4bc8-b9d1-a92ae3f88dcd" class="">
+</p><ul id="9dd0eee5-43d6-4cb7-ae55-fab13d1e5ce9" class="bulleted-list"><li style="list-style-type:disc">articles/admin.py</li></ul><pre id="3755474a-0795-4b8d-8d58-61c62503be8f" class="code"><code>from django.contrib import admin
+from .models import Article
+# Register your models here.
+
+admin.site.register(Article)</code></pre><p id="c349e5b1-9c59-4337-be8a-346ea7215f7f" class="">
+</p><hr id="bd3a6d0f-4ca8-42a3-be6b-88adebf93a7a"/><h2 id="5f5bb275-ddb3-4f98-a7a2-bbd348f4b4ae" class="">CRUD 구현</h2><p id="ecd50554-e224-4e94-8965-cb9cb4a95376" class="">
+</p><h3 id="98e91e83-75ba-4c37-b835-64f9f4a530f2" class="">shell</h3><ul id="cf43bb75-1dd0-4fbf-b074-b388bee73312" class="bulleted-list"><li style="list-style-type:disc">from articles.models import Article (shell plus없으면 원래 이걸 해야 볼 수 있음)</li></ul><ul id="708b4529-4e84-4a2b-a217-2e75ee659545" class="bulleted-list"><li style="list-style-type:disc">Article.objects.all()</li></ul><p id="5e899866-73af-45cc-8e47-478c5ca20ad9" class="">
+</p><h2 id="69a98cf7-02da-455a-8496-947d379d20e9" class="">shell에서 content로 내용 보기</h2><ul id="00d7143a-fa72-4ee6-8ef1-188384171da2" class="bulleted-list"><li style="list-style-type:disc">articles/models.py</li></ul><pre id="5e996a80-0c3a-4734-9509-0024a9d4a5b5" class="code"><code>class Article(models.Model):
+    title = models.CharField(max_length=30)
+    content = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self): # 이거로 하면 id, title를 리턴함
+        return f&#x27;{self.id}번째글 - {self.title}&#x27;</code></pre><p id="52d652da-99dc-4a0a-b31b-20f4a7e1b4dc" class="">
+</p><p id="780d176b-575f-44d6-9134-747b00f8a3fb" class="">
+</p><hr id="a722f51f-5708-4f0a-af44-51df64d1b0d3"/><h2 id="f7db2f4b-fd75-4195-9fc6-fed4d3c34abd" class="">DB내용 출력하기</h2><ul id="61aa7ba1-a8d6-45cb-b319-380b365dc481" class="bulleted-list"><li style="list-style-type:disc">articles/views.py</li></ul><pre id="0b5cb1cf-6580-4618-8113-16d01f14bfa6" class="code"><code>from django.shortcuts import render
+from .models import Article
+# Create your views here.
+def index(request):
+    articles = Article.objects.all()
+    context = {&#x27;articles&#x27; : articles}
+    return render(request, &#x27;articles/index.html&#x27;, context)</code></pre><ul id="c1071075-6469-4c40-b1c9-2dca597ff3b0" class="bulleted-list"><li style="list-style-type:disc">articles/index.html</li></ul><pre id="97c0356d-1e61-42e5-80c3-73eb5d726beb" class="code"><code>{% extends &#x27;base.html&#x27; %}
+
+{% block content %}
+&lt;h1&gt;INDEX&lt;/h1&gt;
+
+{% for article in articles %}
+&lt;p&gt;글 번호: {{article.id}}&lt;/p&gt;
+&lt;p&gt;글 제목 : {{article.title}}&lt;/p&gt;
+&lt;p&gt;글 내용 : {{article.content}}&lt;/p&gt;
+
+{% endfor %}
+{% endblock content %}</code></pre><p id="b4994f17-b306-4234-9485-095016b8eaae" class="">
+</p><hr id="3e532ffa-898d-484e-852e-52826dab9466"/><h2 id="12763303-9e05-418b-87df-fbef9878082a" class="">글 번호로 조회</h2><ul id="36991ae0-7b9c-4f16-ad5a-911d85f30b2c" class="bulleted-list"><li style="list-style-type:disc">articles/urls.py</li></ul><pre id="e217bffa-a891-4b95-b71d-8cf33f41553f" class="code"><code>from django.urls import path
+from . import views
+app_name = &#x27;articles&#x27;
+urlpatterns = [
+    path(&#x27;&#x27;, views.index, name=&#x27;index&#x27;),
+    path(&#x27;&lt;int:id&gt;/&#x27;,views.detail, name=&#x27;detail&#x27;),
+]</code></pre><ul id="5ad5fb25-3e73-4e9e-acb7-4821b59e7539" class="bulleted-list"><li style="list-style-type:disc">articles/views.py</li></ul><pre id="25b01807-dd67-4c1d-9ba5-938071f2203b" class="code"><code>from django.shortcuts import render
+from .models import Article
+# Create your views here.
+def index(request):
+    articles = Article.objects.all()
+    context = {&#x27;articles&#x27; : articles}
+    return render(request, &#x27;articles/index.html&#x27;, context)
+def detail(request,id):
+    article = Article.objects.get(pk=id)
+    context = {&#x27;article&#x27; : article}
+    return render(request, &#x27;articles/detail.html&#x27;, context)</code></pre><ul id="18d6e2c5-f89a-4573-ab11-3f66063b9916" class="bulleted-list"><li style="list-style-type:disc">articles/detail.html</li></ul><pre id="353fcf9a-9b8d-4329-b94f-dbbbb39ef62c" class="code"><code>{% extends &#x27;base.html&#x27; %}
+
+{% block content %}
+&lt;h1&gt;detail&lt;/h1&gt;
+
+&lt;p&gt;글 번호: {{article.id}}&lt;/p&gt;
+&lt;p&gt;글 제목 : {{article.title}}&lt;/p&gt;
+&lt;p&gt;글 내용 : {{article.content}}&lt;/p&gt;
+&lt;p&gt;생성 시간: {{article.created_at}} &lt;/p&gt;
+&lt;p&gt;수정 시간: {{article.updated_at}}&lt;/p&gt;
+
+{% endblock content %}</code></pre><p id="eef53487-9d0e-40e5-8f33-3554f2d6ded9" class="">
+</p><hr id="34a01fb6-6d89-40a0-ae31-cd1d57792055"/><h2 id="bb327622-f3c3-4ed3-9cd2-6330fd216103" class="">내용 작성 유의</h2><figure id="981501d9-6900-4fb5-b21f-ec64a0e86884" class="image"><a href="CRUD%20182d4c6b17fa4531a33249d3631d31a9/Untitled.png"><img style="width:807px" src="CRUD%20182d4c6b17fa4531a33249d3631d31a9/Untitled.png"/></a></figure><figure id="e141fbe4-5ea7-4b4e-9776-4f4875ded287" class="image"><a href="CRUD%20182d4c6b17fa4531a33249d3631d31a9/Untitled%201.png"><img style="width:832px" src="CRUD%20182d4c6b17fa4531a33249d3631d31a9/Untitled%201.png"/></a></figure><p id="0565daca-f81c-4cda-956d-f2cbbba5ae9a" class="">
+</p><hr id="26f2ea04-7aee-4eba-a144-e3647c4480dd"/><h2 id="282d1052-9952-4807-86ab-813aac0ba2e9" class="">GET, POST</h2><figure id="cfeaa2ef-17dd-47a9-a52a-fd854fba62ea" class="image"><a href="CRUD%20182d4c6b17fa4531a33249d3631d31a9/Untitled%202.png"><img style="width:566px" src="CRUD%20182d4c6b17fa4531a33249d3631d31a9/Untitled%202.png"/></a></figure><p id="0a39dfb8-7fbe-45a8-8f30-07905af16714" class="">
+</p><figure id="73e575e1-c463-4381-ae50-c226a04d3897" class="image"><a href="CRUD%20182d4c6b17fa4531a33249d3631d31a9/Untitled%203.png"><img style="width:814px" src="CRUD%20182d4c6b17fa4531a33249d3631d31a9/Untitled%203.png"/></a></figure><p id="5dc885c0-2b3a-4381-ba23-7fc2a0d1c4bc" class="">
+</p><figure id="9480abeb-d91c-4d63-b650-c18eb70847ec" class="image"><a href="CRUD%20182d4c6b17fa4531a33249d3631d31a9/Untitled%204.png"><img style="width:892px" src="CRUD%20182d4c6b17fa4531a33249d3631d31a9/Untitled%204.png"/></a></figure><hr id="981cff34-cf8f-4af0-8ebc-8cc34dc967d3"/><h2 id="1b7025fb-099f-437e-b1a8-0423435f8403" class="">총 정리</h2><p id="ef59c56b-cf02-4a95-86a3-83c15063569f" class="">
+</p><h3 id="eadfb66e-66f3-414c-b89e-87bfa1648829" class="">articles</h3><ul id="40099890-873a-41fe-b2eb-05d55832c189" class="bulleted-list"><li style="list-style-type:disc">urls.py</li></ul><pre id="da66fdeb-d5f4-49a4-926a-71497825dbf8" class="code"><code>from django.urls import path
+from . import views
+
+app_name = &quot;articles&quot;
+urlpatterns = [
+    path(&#x27;&#x27;, views.index, name=&#x27;index&#x27;),
+    path(&#x27;&lt;int:id&gt;/&#x27;,views.detail, name=&#x27;detail&#x27;),
+    path(&#x27;new/&#x27;, views.new, name=&#x27;new&#x27;),
+    path(&#x27;create/&#x27;, views.create, name=&#x27;create&#x27;)
+]</code></pre><ul id="880dc69c-c0cb-4981-b167-50149bc9a163" class="bulleted-list"><li style="list-style-type:disc">views.py</li></ul><pre id="56ca0991-43e1-408c-a396-f1acc5067d73" class="code"><code>from django.shortcuts import render,redirect
+from .models import Article
+
+# Create your views here.
+def index(request):
+    articles = Article.objects.all()
+    context = {&#x27;articles&#x27; : articles}
+    return render(request, &#x27;articles/index.html&#x27;, context)
+def detail(request,id):
+    article = Article.objects.get(pk=id)
+    context = {&#x27;article&#x27; : article}
+    return render(request, &#x27;articles/detail.html&#x27;, context)
+def new(request):
+    return render(request,&#x27;articles/new.html&#x27;)
+
+def create(request):
+    title = request.POST.get(&#x27;title&#x27;)
+    content = request.POST.get(&#x27;content&#x27;)
+    Article.objects.create(title=title, content=content)
+    # 
+    return redirect(&#x27;articles:index&#x27;)</code></pre><ul id="fdf0c8b4-ce85-4a8c-8030-480b02fd73fe" class="bulleted-list"><li style="list-style-type:disc">index.html</li></ul><pre id="2571c3b6-2442-4be2-bb1a-4c6439f2f242" class="code"><code>{% extends &#x27;base.html&#x27; %}
+
+{% block content %}
+&lt;h1&gt;INDEX&lt;/h1&gt;
+&lt;a href=&quot;{% url &#x27;articles:new&#x27; %}&quot;&gt;글 작성하러 가기&lt;/a&gt;
+&lt;br&gt;
+&lt;hr&gt;
+{% for article in articles %}
+&lt;p&gt;글 번호: {{article.id}}&lt;/p&gt;
+&lt;a href=&quot;{% url &#x27;articles:detail&#x27; article.id %}&quot;&gt;글 제목 : {{article.title}}&lt;/a&gt;
+&lt;p&gt;글 내용 : {{article.content}}&lt;/p&gt;
+&lt;hr&gt;
+
+{% endfor %}
+{% endblock content %}</code></pre><ul id="a8202282-ffb9-4a29-b9c5-813fd524bbd9" class="bulleted-list"><li style="list-style-type:disc">detail.html</li></ul><pre id="9b3a80e3-51cb-4723-846a-0d530054faeb" class="code"><code>{% extends &#x27;base.html&#x27; %}
+
+{% block content %}
+&lt;h1&gt;detail&lt;/h1&gt;
+
+&lt;p&gt;글 번호: {{article.id}}&lt;/p&gt;
+&lt;p&gt;글 제목 : {{article.title}}&lt;/p&gt;
+&lt;p&gt;글 내용 : {{article.content}}&lt;/p&gt;
+&lt;p&gt;생성 시간: {{article.created_at}} &lt;/p&gt;
+&lt;p&gt;수정 시간: {{article.updated_at}}&lt;/p&gt;
+
+&lt;a href=&quot;{% url &#x27;articles:index&#x27; %}&quot;&gt;본문 이동&lt;/a&gt;
+
+{% endblock content %}</code></pre><ul id="a3db885f-6d83-419a-91d7-ab067a25e693" class="bulleted-list"><li style="list-style-type:disc">new.html</li></ul><pre id="1260f3b9-7d35-4bea-a615-9306cbb9a87f" class="code"><code>{% extends &#x27;base.html&#x27; %}
+
+{% block content %}
+&lt;h1&gt;글작성&lt;/h1&gt;
+&lt;hr&gt;
+&lt;form action=&quot;{% url &#x27;articles:create&#x27; %}&quot; method=&quot;POST&quot;&gt;
+  {% csrf_token %}
+  &lt;label for=&quot;title&quot;&gt;제목 : &lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;title&quot; name=&quot;title&quot;&gt;
+
+  &lt;label for=&quot;content&quot;&gt;내용 : &lt;/label&gt;
+  &lt;input type=&quot;text&quot; name=&quot;content&quot; id=&quot;content&quot;&gt;
+
+  &lt;input type=&quot;submit&quot;&gt;
+&lt;/form&gt;
+
+{% endblock content %}</code></pre><ul id="4aea0fc2-ad59-4780-8681-4f345dc695d6" class="bulleted-list"><li style="list-style-type:disc">models.py</li></ul><pre id="7ebc5ace-7d16-41cc-8c91-af16208cf83b" class="code"><code>from django.db import models
+
+# Create your models here.
+
+class Article(models.Model):
+    title = models.CharField(max_length=30)
+    content = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f&#x27;{self.id}번째글 - {self.title}&#x27;</code></pre><ul id="157c1328-35b0-4546-a212-961be8e5625b" class="bulleted-list"><li style="list-style-type:disc">admin.py</li></ul><pre id="3ba77d05-18ab-4d3e-ada7-5958d33778a3" class="code"><code>from django.contrib import admin
+from .models import Article
+# Register your models here.
+
+admin.site.register(Article)</code></pre><p id="223a21aa-9948-4aab-abb3-2821788cf3e0" class="">
+</p><hr id="0c23f6a4-b4f1-4609-bdad-609af24d7a00"/><p id="0b11929a-c935-4c97-a524-655e4fdfa70e" class="">
+</p><pre id="17080736-2b63-4ff9-b4b1-15b137b2f3fc" class="code"><code>def create(request):
+    if request.method == &#x27;POST&#x27;:
+        title = request.POST.get(&#x27;title&#x27;)
+        content = request.POST.get(&#x27;content&#x27;)
+        article = Article(title=title, content=content)
+        article.save()
+        return redirect(&#x27;articles:index&#x27;)
+    else: 
+        return render(request, &#x27;articles/create.html&#x27;)</code></pre><p id="913abd3e-0dd6-4775-ad1b-10c4a5370465" class="">
+</p><pre id="06e093b2-afe1-454b-988f-98840d2778ac" class="code"><code>def update(request, pk):
+    if request.method == &#x27;POST&#x27;:
+        article = Article.objects.get(id=pk)
+        article.title = request.POST.get(&#x27;title&#x27;)
+        article.content = request.POST.get(&#x27;content&#x27;)
+        article.save()
+        return redirect(&#x27;articles:detail&#x27;, pk)
+    else:
+        article = Article.objects.get(id=pk)
+        context = {
+            &#x27;article&#x27;: article
+        }
+        return render(request, &#x27;articles/update.html&#x27;, context)</code></pre><p id="db6071bc-58ed-4fa9-b2a1-561047579df7" class="">이런식으로 request.method 방식에 따라 같은 기능을 담당하는 두 개를 구분하여 한 함수로 두개를 처리할 수 있음</p><p id="c5414867-df9b-4919-95e9-720c64c3aeee" class="">
+</p><p id="2111c651-0090-4db7-9969-e3c1185961a2" class="">
+</p><p id="9f87bb54-5d6d-46e5-86b3-eba4c7a2b90b" class="">
+</p><p id="c6de6753-4d2c-4179-9d21-e3eaecb71932" class="">
+</p><p id="0695d9be-8551-455c-89d8-35564eab7f95" class="">
+</p><p id="008341b2-2566-4eff-bb8b-f3e3bbb0be13" class="">This document provides step-by-step instructions on how to build a CRUD (Create, Read, Update, Delete) system using Django. It includes code examples and explanations for each step, including how to create an admin user, how to implement CRUD functionality, and how to handle GET and POST requests. The final section provides a complete summary of the articles app, including <a href="http://urls.py/">urls.py</a>, <a href="http://views.py/">views.py</a>, <a href="http://models.py/">models.py</a>, and <a href="http://admin.py/">admin.py</a> code.</p><p id="bc6b5f8d-2348-44cc-a938-ee7b50e0e620" class="">The first step to building a CRUD system in Django is to create a model. In this example, we will be creating an <code>Article</code> model with a <code>title</code>, <code>content</code>, <code>created_at</code>, and <code>updated_at</code> field.</p><pre id="88c4e42c-0586-43b7-8ce7-0adce86f845f" class="code code-wrap"><code>class Article(models.Model):
+    title = models.CharField(max_length=30)
+    content = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+</code></pre><p id="07c22537-d905-4f12-9551-54e9085f9eb5" class="">The <code>auto_now_add</code> and <code>auto_now</code> attributes ensure that the <code>created_at</code> field is set to the current date and time when a new <code>Article</code> object is created, and that the <code>updated_at</code> field is updated with the current date and time whenever the object is saved.</p><p id="e5192ced-a239-4768-befc-675dc02934e4" class="">Next, we will create an admin user by running the following command in the terminal:</p><pre id="60f6942a-9f26-41fb-b9d3-c2fd333874a7" class="code code-wrap"><code>python manage.py createsuperuser
+</code></pre><p id="28b169a1-b064-4d80-ad5d-b78f101c4d6c" class="">This will prompt you to enter a username, email, and password for the new admin user.</p><p id="88e50b6f-03aa-4710-a7b4-f7119f757954" class="">After creating an admin user, we need to register the <code>Article</code> model with the admin site by adding the following code to <code>articles/admin.py</code>:</p><pre id="8c695289-31eb-41f8-866d-aad9a6d319ac" class="code code-wrap"><code>from django.contrib import admin
+from .models import Article
+
+admin.site.register(Article)
+</code></pre><p id="abf149c4-bbbb-450c-b963-545a971b3ae5" class="">This allows us to view and edit <code>Article</code> objects through the Django admin interface.</p><p id="06fd80f3-b3c1-430d-8493-52074bcb9905" class="">Now that we have a model and an admin user set up, we can start building the CRUD functionality. The first step is to implement the &quot;Read&quot; operation, which involves displaying a list of articles and individual article pages.</p><p id="ff754a8f-9b8f-42ec-98aa-7ec475786c03" class="">To do this, we will create a view called <code>index</code> in <code>articles/views.py</code> that retrieves all <code>Article</code> objects from the database and passes them to the <code>index.html</code> template:</p><pre id="c27ef99e-037f-4a07-8897-a173824915a6" class="code code-wrap"><code>from django.shortcuts import render
+from .models import Article
+
+def index(request):
+    articles = Article.objects.all()
+    context = {&#x27;articles&#x27; : articles}
+    return render(request, &#x27;articles/index.html&#x27;, context)
+</code></pre><p id="c11f8555-5c0c-4230-b6d3-5f51a6b3de2f" class="">In <code>articles/urls.py</code>, we will create a URL pattern for the <code>index</code> view:</p><pre id="0e0be028-2d8e-4f0e-aad9-3259b31954c6" class="code code-wrap"><code>from django.urls import path
+from . import views
+
+app_name = &#x27;articles&#x27;
+urlpatterns = [
+    path(&#x27;&#x27;, views.index, name=&#x27;index&#x27;),
+]
+</code></pre><p id="68c521a8-e0d1-489c-b38d-679e439ea5c7" class="">This will allow us to access the <code>index</code> view by visiting <code>/articles/</code> in our browser.</p><p id="d190bda6-dcec-4eb0-b157-170adb695e57" class="">Next, we will create a template called <code>index.html</code> in <code>articles/templates/articles/</code> that displays a list of articles:</p><pre id="bea0f919-4475-4b0b-999a-0c650518f75c" class="code code-wrap"><code>{% extends &#x27;base.html&#x27; %}
+
+{% block content %}
+&lt;h1&gt;INDEX&lt;/h1&gt;
+
+{% for article in articles %}
+&lt;p&gt;글 번호: {{article.id}}&lt;/p&gt;
+&lt;a href=&quot;{% url &#x27;articles:detail&#x27; article.id %}&quot;&gt;글 제목 : {{article.title}}&lt;/a&gt;
+&lt;p&gt;글 내용 : {{article.content}}&lt;/p&gt;
+
+{% endfor %}
+{% endblock content %}
+</code></pre><p id="8f19cf89-0b35-44b4-8df2-a16cf9aba422" class="">The <code>{% url &#x27;articles:detail&#x27; article.id %}</code> syntax generates a URL for the <code>detail</code> view, which we will create next.</p><p id="ffc91874-89c3-4dee-b736-72e4ff7ac5d3" class="">To implement the &quot;Read&quot; operation for individual articles, we will create a new view called <code>detail</code> in <code>articles/views.py</code> that retrieves a single <code>Article</code> object based on its <code>id</code> field and passes it to the <code>detail.html</code> template:</p><pre id="2cc336b4-2856-4460-901f-4c961be02a18" class="code code-wrap"><code>def detail(request,id):
+    article = Article.objects.get(pk=id)
+    context = {&#x27;article&#x27; : article}
+    return render(request, &#x27;articles/detail.html&#x27;, context)
+</code></pre><p id="16f86a0d-8721-4311-8bed-0207e402f19c" class="">In <code>articles/urls.py</code>, we will create a new URL pattern for the <code>detail</code> view that includes the <code>id</code> parameter:</p><pre id="669b5949-f396-467a-ac28-0a807a329e4c" class="code code-wrap"><code>urlpatterns = [
+    path(&#x27;&#x27;, views.index, name=&#x27;index&#x27;),
+    path(&#x27;&lt;int:id&gt;/&#x27;,views.detail, name=&#x27;detail&#x27;),
+]
+</code></pre><p id="f7f35624-5413-4433-a0b3-077320a5c219" class="">This allows us to access the <code>detail</code> view by visiting <code>/articles/&lt;id&gt;/</code> in our browser.</p><p id="df228f1b-3a90-45ea-8bfa-27790241b81c" class="">Finally, we will create a template called <code>detail.html</code> in <code>articles/templates/articles/</code> that displays information about a single article:</p><pre id="480feda2-5a2e-421c-aa55-d21d42898b8a" class="code code-wrap"><code>{% extends &#x27;base.html&#x27; %}
+
+{% block content %}
+&lt;h1&gt;detail&lt;/h1&gt;
+
+&lt;p&gt;글 번호: {{article.id}}&lt;/p&gt;
+&lt;p&gt;글 제목 : {{article.title}}&lt;/p&gt;
+&lt;p&gt;글 내용 : {{article.content}}&lt;/p&gt;
+&lt;p&gt;생성 시간: {{article.created_at}} &lt;/p&gt;
+&lt;p&gt;수정 시간: {{article.updated_at}}&lt;/p&gt;
+
+{% endblock content %}
+</code></pre><p id="6e9d0dcd-3eb8-4995-947a-6410749f4195" class="">With the &quot;Read&quot; operation complete, we can move on to implementing &quot;Create&quot;, &quot;Update&quot;, and &quot;Delete&quot; functionality. I will continue explaining this in my next message.</p><p id="ab3fb91d-4ecc-4f8d-8c2a-2149d1267bfc" class="">By default, Django doesn&#x27;t automatically re-order the IDs of a model when an object is deleted. This is because changing the IDs of existing objects can lead to unexpected behavior and data inconsistencies. However, if you still want to re-order the IDs of <code>Article</code> objects when an object is deleted, you can override the <code>delete</code> method of the <code>Article</code> model in <code>articles/models.py</code>. Here&#x27;s an example implementation:</p><pre id="bb646a9c-8006-4201-99c3-86c7b28d9420" class="code code-wrap"><code>class Article(models.Model):
+    # fields...
+
+    def __str__(self):
+        return f&#x27;{self.id}번째글 - {self.title}&#x27;
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        # re-order the IDs of remaining objects
+        Article.objects.all().update(id=models.F(&#x27;id&#x27;) - 1)
+</code></pre><p id="4a722738-39cb-4639-98ec-efa07cc1acfc" class="">In this implementation, we override the <code>delete</code> method of the <code>Article</code> model to call the parent <code>delete</code> method, which deletes the object from the database. After the object is deleted, we use the <code>update</code> method to re-order the IDs of all remaining <code>Article</code> objects by subtracting 1 from their IDs.</p><p id="6883c87d-9aad-482f-8094-09496a3da8c7" class="">This implementation should work for small to medium-sized databases, but for larger databases with many objects, it may not be efficient to re-order all the IDs every time an object is deleted. In those cases, you may want to consider using a custom primary key field that is not based on auto-incrementing IDs.</p></div></article></body></html>

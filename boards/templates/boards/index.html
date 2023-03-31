@@ -1,0 +1,58 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<hr>
+<a href="{% url 'boards:create' %}">작성하기</a>
+<!-- 게시글 정렬 -->
+<form method="GET" action="{% url 'boards:index' %}">
+  <div class="col-4">
+    <select name="sort" id="sort">
+      <option value="recently" id="recently">최신순</option>
+      <option value="likes" id="likes">좋아요순</option>
+      <option value="comments" id="comments">댓글순</option>
+    </select>
+    <button class="btn btn-primary" type="submit" value="">정렬</button>
+  </div>
+<hr>
+<div class="container" style="margin-bottom:100px">
+{% for article in page_obj%}
+    <div class="card mb-5" style="max-width: 1400px; max-height:500px;">
+      <div class="row g-0">
+        <div class="col-md-4">
+          {% if article.image %}
+          <img src="{{ article.image.url }}" class="img-fluid rounded-start" alt="{{article.image}}">
+          {% else %}
+          <img src="{% static 'img_default.png' %}" alt="img_default">
+          {% endif %}
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title"></h5>
+            <p class="card-text" style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;"><a href="{% url 'boards:detail' article.pk %}">{{ article.content }}</a></p>
+            <span class="text-muted"><small class="text-muted">작성 시간 : {{article.created_at}}</small></span>
+              <!--<small class="text-muted">작성 시간 : {{article.created_at}}</small></p>-->
+            <p>작성자 : {{article.user}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endfor %}
+</div>
+<!--pagination-->
+<nav aria-label="... ">
+  <ul class="pagination" style="position:relative; justify-content: center; bottom:0;" >
+    <li class="page-item disabled">
+      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+    </li>
+    {% for page in paginator.page_range  %}
+        <li class="page-item"><a class="page-link" href="?page={{page}}">{{page}}</a></li>
+    {% endfor %}
+    <li class="page-item">
+      <a class="page-link" href="#">Next</a>
+    </li>
+  </ul>
+</nav>
+
+{% endblock content %}

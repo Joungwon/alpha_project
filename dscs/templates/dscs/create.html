@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+<br>
+<br>
+<br>
+<h1>알고리즘 공유 게시판</h1>
+<a href="{% url 'dscs:create' %}">글쓰기</a>
+<br>
+<table class="table">
+    <thead>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>날짜</th>
+            <th>조회수</th>
+        </tr>
+    </thead>
+    <hr>
+    <h1>CREATE</h1>
+    <hr>
+    <form action="{% url 'dscs:create' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{form.as_p}}
+      <input type="submit" value="submit">
+    </form><hr>
+    <a href="{% url 'dscs:index' %}">BACK</a>
+</table>
+
+
+{% endblock content %}

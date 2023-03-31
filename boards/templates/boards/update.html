@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+<h1>UPDATE</h1>
+<hr>
+<a href="{% url 'boards:index' %}" class="btn btn-success">글 목록</a>
+<hr>
+<form action="{% url 'boards:update' article.pk %}" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  <div class="hello">
+    <input type="reset" value="초기화">
+    <input type="submit" value="수정하기">
+  </div>
+</form>
+
+{% endblock content %}`

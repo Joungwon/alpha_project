@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+<h1>CREATE</h1>
+<hr>
+<form action="{% url 'boards:create' %}" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  <input type="submit" value="작성하기">
+</form>
+<a href="{% url 'boards:index' %}">글 목록</a>
+{% endblock content %}

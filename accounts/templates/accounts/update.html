@@ -1,0 +1,12 @@
+{% extends 'base.html' %} 
+{% load bootstrap5 %}
+
+{% block content %}
+<h1>회원정보수정</h1>
+<form action="{% url 'accounts:update' %}" method="POST">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  <input type="submit" value="회원정보수정" />
+</form>
+<a href="{% url 'boards:index' %}">목록보기</a>
+{% endblock content %}
